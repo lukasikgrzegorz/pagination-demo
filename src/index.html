@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <title>Pagination Demo</title>
+</head>
+
+<body>
+
+  <div class="form-holder">
+    <form class="search-form" id="search-form">
+      <input type="text" name="searchQuery" autocomplete="off" placeholder="Search images..." />
+      <button type="submit" class="submit-btn">
+        <div class="icon-wrapper">
+          <svg class="icon">
+            <use href="./img/icons.svg#icon-search"></use>
+          </svg>
+        </div>
+      </button>
+    </form>
+  </div>
+
+  <div class="gallery"></div>
+
+  <div id="pagination-buttons" class="tui-pagination"></div>;
+
+  <script src="./js/browser_engine.js" type="module"></script>
+</body>
+
+</html>
