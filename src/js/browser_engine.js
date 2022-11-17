@@ -3,8 +3,7 @@ import axios from 'axios';
 import Notiflix from 'notiflix';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
-import Pagination from 'tui-pagination';
-import 'tui-pagination/dist/tui-pagination.css';
+import Pagination from './pagination';
 
 const APIKEY = '31019872-5203125bb9147bf7b31b034ba';
 const gallery = document.querySelector('.gallery');
@@ -42,11 +41,21 @@ const checkResults = photos => {
     Notiflix.Notify.failure(
       'Sorry, there are no images matching your search query. Please try again.'
     );
+    if (pagination) {
+      pagination.reset();
+    }
   } else {
-    if (actualPage === 1 && !pagination) {
+    if (actualPage === 1) {
       Notiflix.Notify.success(`Hooray! We found ${photos.totalHits} images.`);
       lastPage = Math.ceil(photos.totalHits / ITEMPERPAGE);
-      createPaginationButtons(photos.totalHits);
+      pagination = new Pagination(photos.totalHits, 10, 'pagination-buttons');
+      pagination.create();
+      pagination.handler.on('afterMove', function (eventData) {
+        gallery.innerHTML = '';
+        actualPage = eventData.page;
+        fetchPhotos(currentSearchName, actualPage);
+        return;
+      });
     }
     renderPhotos(photos);
     lightbox.refresh();
@@ -77,22 +86,4 @@ form.addEventListener('submit', e => {
   actualPage = 1;
   gallery.innerHTML = '';
   fetchPhotos(form.searchQuery.value, actualPage);
-  pagination = null;
-  paginationHolder.innerHTML = '';
 });
-
-const createPaginationButtons = totalItems => {
-  pagination = new Pagination(paginationHolder, {
-    totalItems: totalItems,
-    itemsPerPage: ITEMPERPAGE,
-    visiblePages: 5,
-    centerAlign: true,
-  });
-
-  pagination.on('afterMove', function (eventData) {
-    gallery.innerHTML = '';
-    actualPage = eventData.page;
-    fetchPhotos(currentSearchName, actualPage);
-    return;
-  });
-};
